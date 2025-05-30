@@ -17,7 +17,7 @@
         <h1 class="text-5xl font-bold text-gray-900">hexalog</h1>
     </div>
 
-  <p class="text-center text-sm text-gray-600 mt-4">
+  <p class="text-center text-sm text-gray-600 mt-4 font-bold text-gray-500">
     Welcome To Your 6 Sided Assistant.<br>
     Please Login And Start Asking
   </p>
@@ -44,9 +44,9 @@
      <button type="submit"
         [disabled]="isLockedOut || loginForm.invalid"
         
-        class="w-full py-2 text-white rounded-md font-medium bg-gradient-to-r from-blue-500 to-pink-500 
+        class="w-full py-2 text-white rounded-md font-medium bg-gradient-to-r from-blue-700 to-pink-500 
                 hover:from-blue-600 hover:to-pink-600 transition duration-200 
-                disabled:opacity-50 disabled:cursor-not-allowed">
+                disabled:opacity-100 disabled:cursor-not-allowed">
         Sign In
     </button>
 
@@ -60,7 +60,9 @@
     </div>
 
     <!-- Bottom Gradient Shape -->
-    <div class="absolute bottom-0 left-0 w-full h-72 bg-gradient-to-b from-pink-500 to-pink-400 clip-bottom-shape"></div>
- 
+    <div class="absolute bottom-0 left-0 w-full h-72 bg-gradient-to-t from-purple-400 to-pink-400"
+        style="clip-path: polygon(-32% 102%, 51% 1%, 134% 104%);">
+    </div>
+
   </div>
   </div>

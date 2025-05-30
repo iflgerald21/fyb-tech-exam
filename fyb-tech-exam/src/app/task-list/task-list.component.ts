@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AddTaskModalComponent } from '../modals/add/add.component';
 import { EditTaskModalComponent } from '../modals/edit/edit.component';
 import { DeleteConfirmationModalComponent } from '../modals/confirm-delete/confirm-delete.component';
-import { ConfirmComponent } from '../modals/done/done.component';
+import { DoneComponent } from '../modals/done/done.component';
+
 
 interface Task {
   name: string;
@@ -13,18 +14,19 @@ interface Task {
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, AddTaskModalComponent, EditTaskModalComponent, DeleteConfirmationModalComponent, ConfirmComponent ],
+  imports: [CommonModule, AddTaskModalComponent, EditTaskModalComponent, DeleteConfirmationModalComponent, DoneComponent ],
   templateUrl:'./task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent {
-  showModal = false;
-  
-  showEditModal = false;
+  taskToDelete: Task | null = null;
   tasks: Task[] = [];
   taskToEdit: Task | null = null;
+  taskToMarkAsDone: Task | null = null;
+  showModal = false;
+  showEditModal = false;
   taskToEditIndex = -1;
-
+  
   openModal() {
     this.showModal = true;
   }
@@ -41,16 +43,18 @@ export class TaskListComponent {
     });
   }
 
-  taskToDeleteIndex: number | null = null;
+taskToDeleteIndex: number | null = null;
 showDeleteModal = false;
 
 confirmDelete(index: number) {
   this.taskToDeleteIndex = index;
+  this.taskToDelete = this.tasks[index];
   this.showDeleteModal = true;
 }
 
 cancelDelete() {
   this.taskToDeleteIndex = null;
+  this.taskToDelete = null;
   this.showDeleteModal = false;
 }
 
@@ -77,10 +81,10 @@ removeTaskConfirmed() {
   }
 }
 
-showConfirmModal = false;
+  showConfirmModal = false;
   selectedTaskIndex: number | null = null;
-
-  requestMarkAsDone(index: number) {
+  requestMarkAsDone(index: number): void {
+    this.taskToMarkAsDone = this.tasks[index];
     this.selectedTaskIndex = index;
     this.showConfirmModal = true;
   }
