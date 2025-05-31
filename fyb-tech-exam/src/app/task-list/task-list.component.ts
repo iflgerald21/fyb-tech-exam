@@ -1,32 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TaskService, Task } from '../services/task.service';
 import { AddTaskModalComponent } from '../modals/add/add.component';
 import { EditTaskModalComponent } from '../modals/edit/edit.component';
 import { DeleteConfirmationModalComponent } from '../modals/confirm-delete/confirm-delete.component';
 import { DoneComponent } from '../modals/done/done.component';
 
-
-interface Task {
-  name: string;
-  description: string;
-  done?: boolean;
-}
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, AddTaskModalComponent, EditTaskModalComponent, DeleteConfirmationModalComponent, DoneComponent ],
-  templateUrl:'./task-list.component.html',
+  imports: [CommonModule, AddTaskModalComponent, EditTaskModalComponent, DeleteConfirmationModalComponent, DoneComponent],
+  templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent {
-  taskToDelete: Task | null = null;
+export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
+  taskToDelete: Task | null = null;
+  taskToDeleteIndex: number | null = null;
+  showDeleteModal = false;
   taskToEdit: Task | null = null;
-  taskToMarkAsDone: Task | null = null;
-  showModal = false;
-  showEditModal = false;
   taskToEditIndex = -1;
-  
+  showEditModal = false;
+  taskToMarkAsDone: Task | null = null;
+  selectedTaskIndex: number | null = null;
+  showConfirmModal = false;
+
+  showModal = false; 
+
+  constructor(private taskService: TaskService) {}
+
+  ngOnInit() {
+    this.loadTasks();
+  }
+
+  loadTasks() {
+    this.taskService.getTasks().subscribe(tasks => {
+      this.tasks = tasks;
+      console.log("task", this.tasks)
+    });
+  }
   openModal() {
     this.showModal = true;
   }
@@ -35,75 +47,88 @@ export class TaskListComponent {
     this.showModal = false;
   }
 
-  addTask(name: string, description: string) {
-     this.tasks.push({
-      name,
-      description,
-      done: false,
+addTask(name: any, description: any) {
+  this.taskService.addTask(name, description).subscribe(() => {
+    this.loadTasks();
+    this.closeModal();
+  });
+}
+
+
+  confirmDelete(index: number) {
+    this.taskToDeleteIndex = index;
+    this.taskToDelete = this.tasks[index];
+    this.showDeleteModal = true;
+  }
+
+  cancelDelete() {
+    this.taskToDeleteIndex = null;
+    this.taskToDelete = null;
+    this.showDeleteModal = false;
+  }
+
+ removeTaskConfirmed() {
+  if (this.taskToDelete && this.taskToDelete.id) {
+    this.taskService.deleteTask(this.taskToDelete.id).subscribe(() => {
+      this.loadTasks();
+      this.cancelDelete();
     });
-  }
-
-taskToDeleteIndex: number | null = null;
-showDeleteModal = false;
-
-confirmDelete(index: number) {
-  this.taskToDeleteIndex = index;
-  this.taskToDelete = this.tasks[index];
-  this.showDeleteModal = true;
-}
-
-cancelDelete() {
-  this.taskToDeleteIndex = null;
-  this.taskToDelete = null;
-  this.showDeleteModal = false;
-}
-
-removeTaskConfirmed() {
-  if (this.taskToDeleteIndex !== null) {
-    this.tasks.splice(this.taskToDeleteIndex, 1);
-    this.cancelDelete();
+  } else {
+    console.error('Task id is missing!');
   }
 }
+
+
+
   openEditModal(index: number) {
-  this.taskToEditIndex = index;
-  this.taskToEdit = this.tasks[index];
-  this.showEditModal = true;
-}
+    this.taskToEditIndex = index;
+    this.taskToEdit = { ...this.tasks[index] };
+    this.showEditModal = true;
+  }
+
   closeEditModal() {
     this.showEditModal = false;
     this.taskToEditIndex = -1;
-    // this.taskToEdit = '';
+    this.taskToEdit = null;
   }
-  saveEditedTask(updatedTask: Task) {
-  if (this.taskToEditIndex >= 0) {
-    this.tasks[this.taskToEditIndex] = updatedTask;
-    this.closeEditModal();
+
+saveEditedTask(event: { name: string; description: string }) {
+  if (this.taskToEdit) {
+    const updatedTask: Task = {
+      id: this.taskToEdit.id,
+      name: event.name,
+      description: event.description,
+      done: this.taskToEdit.done
+    };
+    this.taskService.updateTask(updatedTask).subscribe(() => {
+      this.loadTasks();
+      this.closeEditModal();  
+    });
   }
 }
 
-  showConfirmModal = false;
-  selectedTaskIndex: number | null = null;
-  requestMarkAsDone(index: number): void {
-    this.taskToMarkAsDone = this.tasks[index];
+
+
+  requestMarkAsDone(index: number) {
+    this.taskToMarkAsDone = { ...this.tasks[index] };
     this.selectedTaskIndex = index;
     this.showConfirmModal = true;
   }
 
-  confirmMarkAsDone() {
-    if (this.selectedTaskIndex !== null) {
-      this.tasks[this.selectedTaskIndex].done = true;
-      this.selectedTaskIndex = null;
-    }
-    this.showConfirmModal = false;
+confirmMarkAsDone() {
+  if (this.taskToMarkAsDone) {
+    this.taskToMarkAsDone.done = true;
+    this.taskService.updateTask(this.taskToMarkAsDone).subscribe(() => {
+      this.loadTasks();
+      this.cancelMarkAsDone();
+    });
   }
+}
+
 
   cancelMarkAsDone() {
     this.selectedTaskIndex = null;
+    this.taskToMarkAsDone = null;
     this.showConfirmModal = false;
-  }
-
-  editTask(index: number) {
-    // Optional: implement edit functionality
-    alert(`Edit task "${this.tasks[index]}" - Not implemented`);
   }
 }

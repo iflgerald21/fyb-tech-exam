@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { AddTaskModalComponent } from './modals/add/add.component';
+import { ForgotPasswordModalComponent } from './modals/forgot-password/forgot-password.component';
 
 
 
@@ -14,7 +15,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'taskList', component: TaskListComponent },
     { path: 'modalAdd', component: AddTaskModalComponent },
-    
+    { path: 'forgot-password', component: ForgotPasswordModalComponent },
     // {
     //     path: 'main', component: MainComponent, children: [
     //         // { path: 'members', component: MembersComponent }

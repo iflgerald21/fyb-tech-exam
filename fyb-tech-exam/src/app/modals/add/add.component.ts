@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface Task {
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
 }
 
 @Component({
@@ -31,8 +31,8 @@ interface Task {
           <label class="block text-sm font-medium text-gray-700 mb-1">Task</label>
           <input 
             type="text"
-            [(ngModel)]="taskName"
-            name="taskName"
+            [(ngModel)]="name"
+            name="name"
             required
             #taskNameInput="ngModel"
             placeholder="Task"
@@ -46,14 +46,14 @@ interface Task {
         <div class="mb-6">
           <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <textarea
-            [(ngModel)]="taskDescription"
-            name="taskDescription"
+            [(ngModel)]="description"
+            name="description"
             maxlength="250"
             #descInput="ngModel"
             placeholder="Description (max 250 characters)"
             class="w-full px-4 py-2 h-24 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500">
           </textarea>
-          <p class="text-xs text-gray-500 text-right">{{ taskDescription.length }}/250</p>
+          <p class="text-xs text-gray-500 text-right">{{ description.length }}/250</p>
           <p *ngIf="descInput.invalid && descInput.touched" class="text-sm text-red-600 mt-1">
             Description must be under 250 characters.
           </p>
@@ -75,8 +75,8 @@ interface Task {
   `,
 })
 export class AddTaskModalComponent {
-  taskName = '';
-  taskDescription = '';
+  name = '';
+  description = '';
 
   @Output() close = new EventEmitter<void>();
 
@@ -87,17 +87,18 @@ export class AddTaskModalComponent {
     this.close.emit();
   }
 
-  submit(form: any) {
+submit(form: any) {
   if (form.invalid) return;
 
   this.addTask.emit({
-    name: this.taskName.trim(),
-    description: this.taskDescription.trim(),
+    name: this.name ?? '',
+    description: this.description ?? ''
   });
 
-  this.taskName = '';
-  this.taskDescription = '';
+  this.name = '';
+  this.description = '';
   this.onClose();
 }
+
 
 }

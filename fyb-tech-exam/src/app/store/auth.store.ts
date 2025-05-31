@@ -18,7 +18,7 @@ export class AuthStore {
     const newAttempts = attempts + 1;
 
     if (newAttempts >= 3) {
-      this.state.lockoutTimers[email] = Date.now() + 10000;
+      this.state.lockoutTimers[email] = Date.now() + 60000;
       this.state.isLockedOut = true;
     }
 

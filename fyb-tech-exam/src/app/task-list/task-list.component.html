@@ -88,12 +88,12 @@
     </div>
   </div>
     <app-add-task-modal
-        *ngIf="showModal"
-        (close)="closeModal()"
-        (addTask)="addTask($event.name, $event.description)"
+      *ngIf="showModal"
+      (close)="closeModal()"
+      (addTask)="addTask($event.name, $event.description)"
     ></app-add-task-modal>
 
-    <app-edit-task-modal
+  <app-edit-task-modal
     *ngIf="showEditModal"
     [taskName]="taskToEdit?.name || ''"
     [taskDescription]="taskToEdit?.description || ''"
@@ -112,7 +112,7 @@
   [visible]="showConfirmModal"
   [message]="'Are you sure you want to complete'"
   [taskName]="taskToMarkAsDone?.name || ''"
-  (confirm)="confirmMarkAsDone()"
+  (confirm)="confirmMarkAsDone()" 
   (cancel)="cancelMarkAsDone()"
 ></app-done>
 

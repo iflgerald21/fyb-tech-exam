@@ -56,13 +56,15 @@
 
     <!-- Forgot password -->
     <div class="mt-4 text-center">
-      <a (click)="forgotPassword()" href="#" class="text-sm text-gray-500 hover:underline">Forgot Password?</a>
+      <a (click)="forgotPassword()" class="text-sm text-gray-500 hover:underline">Forgot Password?</a>
     </div>
+    <app-forgot-password-modal *ngIf="showForgotPassword" (close)="onModalClose()"></app-forgot-password-modal>
 
+    
     <!-- Bottom Gradient Shape -->
     <div class="absolute bottom-0 left-0 w-full h-72 bg-gradient-to-t from-purple-400 to-pink-400"
         style="clip-path: polygon(-32% 102%, 51% 1%, 134% 104%);">
     </div>
 
-  </div>
+    </div>
   </div>

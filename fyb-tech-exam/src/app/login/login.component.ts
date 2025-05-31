@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { AuthStore } from '../store/auth.store';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { ForgotPasswordModalComponent } from '../modals/forgot-password/forgot-password.component';
 
 @Component({
   selector: 'app-login',
   standalone:true,
-  imports: [ FormsModule, CommonModule ],
+  imports: [ FormsModule, CommonModule, ForgotPasswordModalComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -18,6 +19,8 @@ export class LoginComponent {
   error = '';
   isLockedOut = false;
   lockoutInterval: any;
+  showForgotPassword = false;
+
   constructor(private authService: AuthService, private authStore: AuthStore, private router: Router) {}
 
   onSubmit(loginForm: NgForm): void {
@@ -73,7 +76,11 @@ startLockoutCountdown(): void {
       this.lockoutInterval = null;
     }
   }
-  forgotPassword(): void {
-    window.open('https://www.google.com', '_blank');
+   forgotPassword(): void {
+    this.showForgotPassword = true;
   }
+
+    onModalClose(): void {
+      this.showForgotPassword = false;
+    }
 }
