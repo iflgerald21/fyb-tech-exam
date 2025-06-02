@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TaskService, Task } from '../services/task.service';
+import { TaskService, Task } from '../services/task-list.service';
 import { AddTaskModalComponent } from '../modals/add/add.component';
 import { EditTaskModalComponent } from '../modals/edit/edit.component';
 import { DeleteConfirmationModalComponent } from '../modals/confirm-delete/confirm-delete.component';
@@ -29,9 +29,14 @@ export class TaskListComponent implements OnInit {
 
   constructor(private taskService: TaskService) {}
 
-  ngOnInit() {
+ ngOnInit() {
+  this.loadTasks();
+
+  setInterval(() => {
     this.loadTasks();
-  }
+  }, 5000); // Every 5 seconds
+}
+
 
   loadTasks() {
     this.taskService.getTasks().subscribe(tasks => {

@@ -58,7 +58,7 @@
     <div class="mt-4 text-center">
       <a (click)="forgotPassword()" class="text-sm text-gray-500 hover:underline">Forgot Password?</a>
     </div>
-    <app-forgot-password-modal *ngIf="showForgotPassword" (close)="onModalClose()"></app-forgot-password-modal>
+    <app-forgot-modal *ngIf="showForgotPassword" (close)="onModalClose()"></app-forgot-modal>
 
     
     <!-- Bottom Gradient Shape -->

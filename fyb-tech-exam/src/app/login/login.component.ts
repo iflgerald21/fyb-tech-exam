@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthStore } from '../store/auth.store';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { ForgotPasswordModalComponent } from '../modals/forgot-password/forgot-password.component';
+import { ForgotPasswordModalComponent } from '../modals/forgot/forgot.component';
 
 @Component({
   selector: 'app-login',
